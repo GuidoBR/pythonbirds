@@ -37,7 +37,7 @@ class Ator():
         :param tempo: o tempo do jogo
         :return: posição x, y do ator
         """
-        return 1, 1
+        return self.x, self.y
 
     def colidir(self, outro_ator, intervalo=1):
         """
@@ -51,16 +51,25 @@ class Ator():
         :param intervalo: Intervalo a ser considerado
         :return:
         """
-        pass
+        if ((self.status != ATIVO) or (outro_ator.status != ATIVO)):
+            return
+
+        intervalo_x = self.x - intervalo <= outro_ator.x <= self.x + intervalo
+        intervalo_y = self.y - intervalo <= outro_ator.y <= self.y + intervalo
+        if intervalo_x and intervalo_y:
+            self.status = DESTRUIDO
+            outro_ator.status = DESTRUIDO
 
 
 
 class Obstaculo(Ator):
-    pass
+    _caracter_ativo = 'O'
+    _caracter_destruido = ' '
 
 
 class Porco(Ator):
-    pass
+    _caracter_ativo = '@'
+    _caracter_destruido = '+'
 
 
 class Passaro(Ator):
@@ -128,8 +137,12 @@ class Passaro(Ator):
 
 
 class PassaroAmarelo(Passaro):
-    pass
+    _caracter_ativo = 'A'
+    _caracter_destruido = 'a'
+    velocidade_escalar = 30
 
 
 class PassaroVermelho(Passaro):
-    pass
+    _caracter_ativo = 'V'
+    _caracter_destruido = 'v'
+    velocidade_escalar = 20

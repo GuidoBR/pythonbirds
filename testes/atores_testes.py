@@ -46,7 +46,7 @@ class AtorTestes(TestCase):
     def teste_colisao_entre_atores_ativos(self):
         """
         Teste de colisão entre dois atores
-        Incialmente atores possuem status ATIVO. Ao se chocarem, ele muda para Destruído
+        Inicialmente atores possuem status ATIVO. Ao se chocarem, ele muda para DESTRUIDO
         A função assert_colisao_atores_ativos testa justamente se dois atore ativos se chocam quando estão em posições
         vizinhas.
         """
@@ -66,7 +66,7 @@ class AtorTestes(TestCase):
         # Com intervalo 2, diferente do padrão 1, essa colisão deveria acontecer
         self.assert_colisao_atores_ativos(Ator(2, 2), Ator(2, 4), 2)
 
-    def teste_nao_colisao_entre_atores_ativos(self):
+    def teste_nao_colisao_entre_atores_distantes(self):
         'Teste de que não há colisão entre atores distantes'
         self.assert_nao_colisao(Ator(2, 2), Ator(2, 4))
         self.assert_nao_colisao(Ator(2, 2), Ator(3, 4))
@@ -170,8 +170,8 @@ class PassaroBaseTests(TestCase):
 
     def assert_passaro_posicao(self, x_esperado, y_esperado, status_esperado, passaro, tempo):
         """
-        Mètodo que se testa posição do pássaro.
-        Atenção: Esse não é método de teste porque nao se inicia com prefixo "text".
+        Método que se testa posição do pássaro.
+        Atenção: Esse não é método de teste porque nao se inicia com prefixo "test".
         :param x_esperado: posição x esperada do passaro
         :param y_esperado: posição y esperada do passaro
         :param status_esperado: status esperado do passaro
