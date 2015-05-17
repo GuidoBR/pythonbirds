@@ -36,14 +36,13 @@ class Fase():
         self._porcos = []
         self._obstaculos = []
 
-
     def adicionar_obstaculo(self, *obstaculos):
         """
         Adiciona obstáculos em uma fase
 
         :param obstaculos:
         """
-        pass
+        self._obstaculos.extend(obstaculos)
 
     def adicionar_porco(self, *porcos):
         """
@@ -51,7 +50,7 @@ class Fase():
 
         :param porcos:
         """
-        pass
+        self._porcos.extend(porcos)
 
     def adicionar_passaro(self, *passaros):
         """
@@ -59,35 +58,44 @@ class Fase():
 
         :param passaros:
         """
-        pass
+        self._passaros.extend(passaros)
 
     def status(self):
         """
         Método que indica com mensagem o status do jogo
 
-        Se o jogo está em andamento (ainda tem porco ativo e pássaro ativo), retorna essa mensagem.
+        Se o jogo está em andamento (ainda tem porco ativo e pássaro ativo),
+        retorna essa mensagem.
 
-        Se o jogo acabou com derrota (ainda existe porco ativo), retorna essa mensagem
+        Se o jogo acabou com derrota (ainda existe porco ativo),
+        retorna essa mensagem
 
-        Se o jogo acabou com vitória (não existe porco ativo), retorna essa mensagem
+        Se o jogo acabou com vitória (não existe porco ativo),
+        retorna essa mensagem
 
         :return:
         """
-        return EM_ANDAMENTO
+        if self._existe_porco_ativo():
+            if self._existe_passaro_ativo():
+                return EM_ANDAMENTO
+            return DERROTA
+        return VITORIA
 
     def lancar(self, angulo, tempo):
         """
         Método que executa lógica de lançamento.
 
-        Deve escolher o primeiro pássaro não lançado da lista e chamar seu método lançar
+        Deve escolher o primeiro pássaro não lançado da lista e chamar seu
+        método lançar.
 
         Se não houver esse tipo de pássaro, não deve fazer nada
 
         :param angulo: ângulo de lançamento
         :param tempo: Tempo de lançamento
         """
-        pass
-
+        for passaro in self._passaros:
+            if passaro.status == ATIVO:
+                passaro.lancar(angulo, tempo)
 
     def calcular_pontos(self, tempo):
         """
@@ -98,10 +106,21 @@ class Fase():
         :param tempo: tempo para o qual devem ser calculados os pontos
         :return: objeto do tipo Ponto
         """
-        pontos=[]
+        pontos = []
 
         return pontos
 
     def _transformar_em_ponto(self, ator):
         return Ponto(ator.x, ator.y, ator.caracter())
 
+    def _existe_ator_ativo(self, lista_atores):
+        for ator in lista_atores:
+            if ator.status == ATIVO:
+                return True
+        return False
+
+    def _existe_porco_ativo(self):
+        return self._existe_ator_ativo(self._porcos)
+
+    def _existe_passaro_ativo(self):
+        return self._existe_ator_ativo(self._passaros)
