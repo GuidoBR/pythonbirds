@@ -74,6 +74,8 @@ class Porco(Ator):
 
 class Passaro(Ator):
     velocidade_escalar = 10
+    angulo_de_lancamento = None
+    tempo_de_lancamento = None
 
     def __init__(self, x=0, y=0):
         """
@@ -97,7 +99,7 @@ class Passaro(Ator):
 
         :return: booleano
         """
-        return True
+        return self.angulo_de_lancamento is not None
 
     def colidir_com_chao(self):
         """
@@ -105,7 +107,8 @@ class Passaro(Ator):
         o status dos Passaro deve ser alterado para destruido, bem como o seu caracter
 
         """
-        pass
+        if self.y <= 0:
+            self.status = DESTRUIDO
 
     def calcular_posicao(self, tempo):
         """
@@ -133,7 +136,8 @@ class Passaro(Ator):
         :param tempo_de_lancamento:
         :return:
         """
-        pass
+        self.tempo_de_lancamento = tempo_de_lancamento
+        self.angulo_de_lancamento = math.radians(angulo)
 
 
 class PassaroAmarelo(Passaro):
