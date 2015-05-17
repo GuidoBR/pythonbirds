@@ -123,7 +123,7 @@ class FaseTestes(TestCase):
         self.assertFalse(passaro_amarelo.foi_lancado())
         fase.lancar(90, 1)
         fase.lancar(45, 3)
-        fase.lancar(31, 5)  # testando que lançar passaros depios de todos lançados não causa erro
+        fase.lancar(31, 5)  # testando que lançar passaros depois de todos lançados não causa erro
 
         self.assertTrue(passaro_vermelho.foi_lancado())
         self.assertEqual(math.radians(90), passaro_vermelho._angulo_de_lancamento)
@@ -197,7 +197,6 @@ class FaseTestes(TestCase):
         # i variando de 7 até 8.49
         for i in range(700, 849, 1):
             fase_exemplo.calcular_pontos(i / 100)
-        print(fase_exemplo.calcular_pontos(8.5))
 
         expected = set([Ponto(32, 11, 'v'), Ponto(77, 0, 'a'), Ponto(70, 2, 'a'), Ponto(31, 10, ' '), Ponto(78, 1, '+'),
                         Ponto(70, 1, '+')])

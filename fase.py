@@ -36,13 +36,16 @@ class Fase():
         self._porcos = []
         self._obstaculos = []
 
+    def _adicionar_ator(self, lista, *atores):
+        lista.extend(atores)
+
     def adicionar_obstaculo(self, *obstaculos):
         """
         Adiciona obstáculos em uma fase
 
         :param obstaculos:
         """
-        self._obstaculos.extend(obstaculos)
+        self._adicionar_ator(self._obstaculos, *obstaculos)
 
     def adicionar_porco(self, *porcos):
         """
@@ -50,7 +53,7 @@ class Fase():
 
         :param porcos:
         """
-        self._porcos.extend(porcos)
+        self._adicionar_ator(self._porcos, *porcos)
 
     def adicionar_passaro(self, *passaros):
         """
@@ -58,7 +61,7 @@ class Fase():
 
         :param passaros:
         """
-        self._passaros.extend(passaros)
+        self._adicionar_ator(self._passaros, *passaros)
 
     def status(self):
         """
@@ -94,8 +97,9 @@ class Fase():
         :param tempo: Tempo de lançamento
         """
         for passaro in self._passaros:
-            if passaro.status == ATIVO:
+            if not passaro.foi_lancado():
                 passaro.lancar(angulo, tempo)
+                return
 
     def calcular_pontos(self, tempo):
         """
@@ -106,12 +110,23 @@ class Fase():
         :param tempo: tempo para o qual devem ser calculados os pontos
         :return: objeto do tipo Ponto
         """
-        pontos = []
-
+        pontos = [self._calcular_ponto_de_passaro(p, tempo) for p in self._passaros]
+        obstaculos_e_porcos = chain(self._obstaculos, self._porcos)
+        pontos.extend([self._transformar_em_ponto(ator) for ator in obstaculos_e_porcos])
         return pontos
 
     def _transformar_em_ponto(self, ator):
         return Ponto(ator.x, ator.y, ator.caracter())
+
+    def _calcular_ponto_de_passaro(self, passaro, tempo):
+        passaro.calcular_posicao(tempo)
+        for ator in chain(self._obstaculos, self._porcos):
+            if ATIVO == passaro.status:
+                passaro.colidir(ator, self.intervalo_de_colisao)
+                passaro.colidir_com_chao()
+            else:
+                break
+        return self._transformar_em_ponto(passaro)
 
     def _existe_ator_ativo(self, lista_atores):
         for ator in lista_atores:
